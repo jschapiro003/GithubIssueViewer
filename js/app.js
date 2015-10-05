@@ -10,10 +10,11 @@ import IssueView from './components/IssueView.js';
 let App = React.createClass({  
   render() {
     return (
-      <div>
+      <div class='pageContainer'>
         <Login/>
         {this.props.children}
       </div>
+
     );
   }
 });

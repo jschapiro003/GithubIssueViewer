@@ -1,0 +1,65 @@
+* {/* Reset */
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html, body{
+  height: 100%;
+  background: #EDEDED;
+  font-family: 'Roboto', serif;
+  color: #222;
+}
+
+.pageContainer{
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#issues{
+  margin: 75px auto 0 180px;
+  width: 70%;
+} 
+
+.issue {
+  padding-top: 20px;
+  margin-left: 85px;
+}
+
+.issue-item {
+  display: block;
+  width: 100%;
+  height: 100px;
+  margin-bottom: 10px;
+  background: white;
+  padding-left: -100px;
+  box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+  transition:  0.7s;
+  overflow: hidden;
+}
+.issue-item .icon-holder{
+  width: 55px;
+  float: left;
+  margin: 21px 20px 0 25px;
+}
+.issue-item .icon-holder .icon{
+  width: 55px;
+  height: 55px;
+  border-radius: 100%;
+  float: left;
+  background-image: url('https://lh3.googleusercontent.com/-Az9OhFIaxEY/AAAAAAAAAAI/AAAAAAAAAAA/iHtDLHxQMFc/photo.jpg');
+  background-size: 55px 55px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.issue-item .text-holder{
+  margin-top: 22px;
+  width: 75%;
+  float: left;
+}
+
+.issue-title {
+  font-size: .9em;
+  font-weight: 500;
+}
