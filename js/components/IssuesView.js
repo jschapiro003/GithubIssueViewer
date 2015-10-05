@@ -22,8 +22,22 @@ let IssuesView = React.createClass({
     }.bind(this));
   },
 
-  render() {
+  summaryBlurb: function(summary){
+  	var endpoint = 140;
+  	if (summary.length <= endpoint){
+  		return summary;
+  	}
+  	//if character after last character of string not a blank space, keep going
+  	while(summary[endpoint+1] && summary[endpoint+1] !== ' ' ){
+  		endpoint++;
+  		console.log('goin up')
+  	}
+  	console.log(summary.substr(0,endpoint))
+  	return summary.substr(0,endpoint) + '...';
+  },
 
+  render() {
+  	var self = this;
   	var issues = this.state.issuesList.map(function(issue){
   		return (
   			<div style={styles.issue}> 
@@ -35,7 +49,7 @@ let IssuesView = React.createClass({
 	  				<p>num: {issue.number}</p>
 	  				<p>labels: {issue.labels}</p>
 	  				<p>username: {issue.user.login}</p>
-	  				<p>body: {issue.body}</p>
+	  				<p>body: {self.summaryBlurb(issue.body)}</p>
   				</div>
   			</div>
   		)
@@ -73,7 +87,7 @@ let styles = {
   		float: 'left',
   		marginTop: 21,
   		marginBottom: 20,
-  		marginRight: 0,
+  		marginRight: 15,
   		marginLeft: 25
 	},
 	issue_icon: {
