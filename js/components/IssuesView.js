@@ -27,6 +27,9 @@ let IssuesView = React.createClass({
   	var issues = this.state.issuesList.map(function(issue){
   		return (
   			<div style={styles.issue}> 
+  				<div style={styles.issue_icon_holder}>
+  					<div style={styles.issue_icon.style(issue.user.avatar_url)}></div>
+  				</div>
   				<div style={styles.issue_content}>
 	  				<p style={styles.issue_title}>{issue.title}</p>
 	  				<p>num: {issue.number}</p>
@@ -64,7 +67,30 @@ let styles = {
 	},
 	issue_title: {
 		fontSize:24,
+	},
+	issue_icon_holder: {
+		width: 55,
+  		float: 'left',
+  		marginTop: 21,
+  		marginBottom: 20,
+  		marginRight: 0,
+  		marginLeft: 25
+	},
+	issue_icon: {
+		style: function(avatar_url){
+			return {
+				 width: 55,
+				 height: 55,
+				 borderRadius: 100,
+				 float: 'left',
+				 backgroundImage: 'url('+avatar_url+')',
+				 backgroundSize:'cover',
+				 WebkitBoxShadow: "0 1px 2px rgba(0,0,0,0.3)",
+			}
+		}
+		
 	}
+
 	
 }
 
@@ -72,33 +98,3 @@ export default IssuesView;
 
 
 
-/*
- <div class="feed">
-        <!--1 Column Feed Item Holder-->
-
-
-        <div class="feed-item blog">
-          <div class="icon-holder">
-            <div class="icon"></div>
-          </div>
-          <div class="text-holder col-3-5">
-            <div class="feed-title">Blog Item</div>
-            <div class="feed-description">Lorem ipsum dolor nde sunt nobis quia, nam quasi!
-            </div>
-          </div>
-          <!--End of Text Holder-->
-
-
-          <div class="post-options-holder">
-            <div class="tools">
-              <i class="fa fa-ellipsis-v" id="postsettings"></i>
-            </div>
-            <!--End Tools-->
-          </div>
-          <!--End Post Options Holder -->
-
-        </div>
-
-
-
- */
