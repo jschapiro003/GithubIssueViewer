@@ -3,25 +3,9 @@ import Router from 'react-router';
 import { DefaultRoute, Link, Route, RouteHandler } from 'react-router';
 import IssueStore from '../IssueStore.js';
 
-const ISSUES_URL = 'https://api.github.com/repos/npm/npm/issues';
 
 let IssuesView = React.createClass({ 
   
-  /*getInitialState: function() {
-     return {
-       issuesList: [],
-     };
-   },
-  
-  componentDidMount: function() {
-    $.get(ISSUES_URL, function(results) {
-      if (this.isMounted()) {
-        this.setState({
-          issuesList:results,
-        });
-      }
-    }.bind(this));
-  },*/
   getInitialState(){
     return {
       issues: IssueStore.getIssues(),
@@ -61,7 +45,6 @@ let IssuesView = React.createClass({
   		endpoint++;
   	}
   	
-
   	return summary.substr(0,endpoint);
   },
 
@@ -79,7 +62,7 @@ let IssuesView = React.createClass({
 	  				<p style={styles.issue_title}>{issue.title}</p>
 	  				<p style={styles.issue_username}>@{issue.user.login}</p>
 	  				<p style={styles.issue_summary}>{self.summaryBlurb(issue.body)}
-	  					<Link to={`issues/${issue.number}`} params={{issue: issue}} > ...</Link>
+	  					<Link to={`issues/${issue.number}`} > ...</Link>
 	  				</p>
   				</div>
   			</div>
@@ -88,7 +71,7 @@ let IssuesView = React.createClass({
 
     return(
     	<div style={styles.issues}>
-	    	<header>Header</header>
+	    	<header style={styles.header}>Header</header>
 	    		{issues}
 	    	<footer>Footer</footer>
     	</div>
@@ -99,8 +82,17 @@ let IssuesView = React.createClass({
 
 //issues styles
 let styles = {
+	header: {
+	  position:'fixed',
+	  backgroundColor:'black',
+	  top:0,
+	  marginBottom:20,
+	  width:'100%',
+	  height:'8%',
+
+	},
 	issue: {
-		marginTop:20,
+		marginTop:60,
 		marginLeft:50,
 		marginRight:50,
 		background:'white',

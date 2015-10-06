@@ -32,8 +32,8 @@ let IssueStore = module.exports = {
     return array
   },
 
-  getContact: function (number) {
-    return _issues[id]
+  getIssue: function (number) {
+    return _issues[number]
   },
 
   notifyChange: function () {
