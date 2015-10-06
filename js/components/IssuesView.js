@@ -71,7 +71,7 @@ let IssuesView = React.createClass({
 
     return(
     	<div style={styles.issues}>
-	    	<header style={styles.header}>Header</header>
+	    	<header style={styles.header}>Jonathan Schapiro Github Issue Viewer</header>
 	    		{issues}
 	    	<footer>Footer</footer>
     	</div>
@@ -84,13 +84,17 @@ let IssuesView = React.createClass({
 let styles = {
 	header: {
 	  position:'fixed',
-	  backgroundColor:'black',
+	  backgroundColor:'#677077',
 	  top:0,
-	  marginBottom:20,
 	  width:'100%',
 	  height:'8%',
-
+	  paddingTop:'10',
+	  fontSize:24,
+	  fontFamily:'Tahoma', 
+	  textAlign:'center',
+	  color:'#f2b632'
 	},
+
 	issue: {
 		marginTop:60,
 		marginLeft:50,
@@ -103,6 +107,7 @@ let styles = {
 		paddingBottom:30,
 	},
 	issue_title: {
+		color:'#252839',
 		fontSize:18,
 		fontWeight:'bold',
 	},
@@ -133,10 +138,13 @@ let styles = {
 		fontSize:14,
 		marginRight:10,
 		marginTop:5,
+		color:'#252839',
 	},
 	issue_username: {
 		fontSize:16,
 		marginLeft:40,
+		fontStyle:'italic',
+		color:'#677077',
 	},
 	issue_summary: {
 		fontSize: 14,

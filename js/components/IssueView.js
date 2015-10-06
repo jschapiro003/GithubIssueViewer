@@ -5,7 +5,42 @@ import IssueStore from '../IssueStore.js';
 
 let IssueView = React.createClass({ 
 
+  componentDidMount() {
+    this.getIssueComments(this.props.params.number,function(err,res){
+    	if (err){
+    		console.log(err)
+    	}
+    	res.forEach(function (comment) {
+        console.log(comment)
+        
+      })
+    })
+  },
+
+  getIssueComments(issueNumber,cb){
+  	var req = new XMLHttpRequest();
+  	var url = 'https://api.github.com/repos/npm/npm/issues/' + issueNumber + '/comments'
+  	req.onload = function () {
+  	  if (req.status === 404) {
+  	    cb(new Error('not found'))
+  	  } else {
+  	    cb(null, JSON.parse(req.response))
+  	  }
+  	}
+  	req.open('GET', url)
+  	req.send()
+  },
+  
+  getIssueState(state){
+  	if (state==='open'){
+  		return <span style={styles.openIssue}> OPEN </span>
+  	} else {
+  		return <span style={styles.closedIssue}> CLOSED </span>
+  	}
+  },
+
   render() {
+  	var self = this;
   	//issue number retrieved based on url not on property passed in through Link!
   	let issue = IssueStore.getIssue(this.props.params.number);
     return(
@@ -18,9 +53,8 @@ let IssueView = React.createClass({
   				<div style={styles.issue_content}>
 	  				<p style={styles.issue_title}>{issue.title}</p>
 	  				<p style={styles.issue_username}>@{issue.user.login}</p>
-	  				<p style={styles.issue_summary}>{issue.body}
-	  					<Link to={`issues/${issue.number}`} > ...</Link>
-	  				</p>
+	  				<p style={styles.state}> {self.getIssueState(issue.state)} </p>
+	  				<p style={styles.issue_summary}>{issue.body}</p>
   				</div>
   			</div>
 
@@ -35,12 +69,14 @@ let styles = {
 		marginTop:20,
 		marginLeft:50,
 		marginRight:50,
+		marginBottom:10,
 		background:'white',
 	},
 	issue_content: {
 		marginLeft:10,
 		paddingTop:10,
 		paddingBottom:30,
+		paddingRight:10,
 	},
 	issue_title: {
 		fontSize:18,
@@ -85,6 +121,14 @@ let styles = {
 	},
 	issue_labels: {
 		float:'right'
+	},
+	openIssue: {
+		backgroundColor:'green',
+		color:'white'
+	},
+	closedIssue: {
+		backgroundColor:'red',
+		color:'white',
 	}
 
 	
