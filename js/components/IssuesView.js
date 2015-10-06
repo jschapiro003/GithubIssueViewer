@@ -1,12 +1,13 @@
 import React from 'react';
 import Router from 'react-router';  
 import { DefaultRoute, Link, Route, RouteHandler } from 'react-router';
+import IssueStore from '../IssueStore.js';
 
 const ISSUES_URL = 'https://api.github.com/repos/npm/npm/issues';
 
 let IssuesView = React.createClass({ 
   
-  getInitialState: function() {
+  /*getInitialState: function() {
      return {
        issuesList: [],
      };
@@ -20,6 +21,34 @@ let IssuesView = React.createClass({
         });
       }
     }.bind(this));
+  },*/
+  getInitialState(){
+    return {
+      issues: IssueStore.getIssues(),
+      loading:true
+    }
+  },
+
+  componentWillMount() {
+    IssueStore.init()
+  },
+
+  componentDidMount() {
+    IssueStore.addChangeListener(this.updateIssues)
+  },
+
+  componentWillUnmount() {
+    IssueStore.removeChangeListener(this.updateIssues)
+  },
+
+  updateIssues() {
+    if (!this.isMounted())
+      return
+
+    this.setState({
+      issues: IssueStore.getIssues(),
+      loading: false
+    })
   },
 
   summaryBlurb: function(summary){
@@ -30,26 +59,28 @@ let IssuesView = React.createClass({
   	//if character after last character of string not a blank space, keep going
   	while(summary[endpoint+1] && summary[endpoint+1] !== ' ' ){
   		endpoint++;
-  		console.log('goin up')
   	}
-  	console.log(summary.substr(0,endpoint))
-  	return summary.substr(0,endpoint) + '...';
+  	
+
+  	return summary.substr(0,endpoint);
   },
 
   render() {
   	var self = this;
-  	var issues = this.state.issuesList.map(function(issue){
+  	var detailIssueURL = 'issues/';
+  	var issues = this.state.issues.map(function(issue){
   		return (
-  			<div style={styles.issue}> 
+  			<div key={issue.number} style={styles.issue}> 
+  				<p style={styles.issue_number}>#{issue.number}</p>
   				<div style={styles.issue_icon_holder}>
   					<div style={styles.issue_icon.style(issue.user.avatar_url)}></div>
   				</div>
   				<div style={styles.issue_content}>
 	  				<p style={styles.issue_title}>{issue.title}</p>
-	  				<p>num: {issue.number}</p>
-	  				<p>labels: {issue.labels}</p>
-	  				<p>username: {issue.user.login}</p>
-	  				<p>body: {self.summaryBlurb(issue.body)}</p>
+	  				<p style={styles.issue_username}>@{issue.user.login}</p>
+	  				<p style={styles.issue_summary}>{self.summaryBlurb(issue.body)}
+	  					<Link to={`issues/${issue.number}`} params={{issue: issue}} > ...</Link>
+	  				</p>
   				</div>
   			</div>
   		)
@@ -57,9 +88,9 @@ let IssuesView = React.createClass({
 
     return(
     	<div style={styles.issues}>
-	    	Welcome to Main Issues View
+	    	<header>Header</header>
 	    		{issues}
-	    	<Link to='/issues/issue/hello'> Enter</Link>
+	    	<footer>Footer</footer>
     	</div>
     	);
 
@@ -77,10 +108,11 @@ let styles = {
 	issue_content: {
 		marginLeft:10,
 		paddingTop:10,
-		paddingBottom:10,
+		paddingBottom:30,
 	},
 	issue_title: {
-		fontSize:24,
+		fontSize:18,
+		fontWeight:'bold',
 	},
 	issue_icon_holder: {
 		width: 55,
@@ -103,6 +135,24 @@ let styles = {
 			}
 		}
 		
+	},
+	issue_number: {
+		float:'right',
+		fontSize:14,
+		marginRight:10,
+		marginTop:5,
+	},
+	issue_username: {
+		fontSize:16,
+		marginLeft:40,
+	},
+	issue_summary: {
+		fontSize: 14,
+		color:'#A9A9A9'
+
+	},
+	issue_labels: {
+		float:'right'
 	}
 
 	
