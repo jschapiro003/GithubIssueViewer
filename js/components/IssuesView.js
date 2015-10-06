@@ -41,11 +41,13 @@ let IssuesView = React.createClass({
   		return summary;
   	}
   	//if character after last character of string not a blank space, keep going
+  	
   	while(summary[endpoint+1] && summary[endpoint+1] !== ' ' ){
+
   		endpoint++;
   	}
   	
-  	return summary.substr(0,endpoint);
+  	return summary.substr(0,endpoint+1);
   },
 
   render() {
@@ -62,7 +64,7 @@ let IssuesView = React.createClass({
 	  				<p style={styles.issue_title}>{issue.title}</p>
 	  				<p style={styles.issue_username}>@{issue.user.login}</p>
 	  				<p style={styles.issue_summary}>{self.summaryBlurb(issue.body)}
-	  					<Link to={`issues/${issue.number}`} > ...</Link>
+	  					<Link to={`issues/${issue.number}`} >...</Link>
 	  				</p>
   				</div>
   			</div>
@@ -73,7 +75,6 @@ let IssuesView = React.createClass({
     	<div style={styles.issues}>
 	    	<header style={styles.header}>Jonathan Schapiro Github Issue Viewer</header>
 	    		{issues}
-	    	<footer>Footer</footer>
     	</div>
     	);
 
@@ -84,7 +85,7 @@ let IssuesView = React.createClass({
 let styles = {
 	header: {
 	  position:'fixed',
-	  backgroundColor:'#677077',
+	  backgroundColor:'white',
 	  top:0,
 	  width:'100%',
 	  height:'8%',
@@ -153,7 +154,8 @@ let styles = {
 	},
 	issue_labels: {
 		float:'right'
-	}
+	},
+	
 
 	
 }

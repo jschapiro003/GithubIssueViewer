@@ -12,9 +12,8 @@ let IssueStore = module.exports = {
     _initCalled = true
 
     getJSON(ISSUES_URL, function (err, res) {
-   
+      
       res.forEach(function (issue) {
-        console.log(issue)
         _issues[issue.number] = issue;
       })
 
