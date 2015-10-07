@@ -6,10 +6,7 @@ let _initCalled = false
 let IssueStore = module.exports = {
 
   init: function () {
-    if (_initCalled)
-      return
-
-    _initCalled = true
+    
 
     getJSON(ISSUES_URL, function (err, res) {
       
@@ -32,7 +29,6 @@ let IssueStore = module.exports = {
   },
 
   getIssuesRange: function(start,end){
-    console.log('getting more issues with range: ',start,end)
     var array = []
     var start = start;
     var end = end;

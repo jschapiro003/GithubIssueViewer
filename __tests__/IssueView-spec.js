@@ -7,7 +7,6 @@ describe('IssueView', function() {
  
 
   beforeEach(function() {
-     console.log('IssueView',IssueView)
     IssueView = require('../js/components/IssueView.js');
   
   });

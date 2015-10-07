@@ -3,57 +3,69 @@ import Router from 'react-router';
 import { DefaultRoute, Link, Route, RouteHandler } from 'react-router';
 import IssueStore from '../IssueStore.js';
 
+//component that displays the details of a specific issue as well as the comments
 let IssueView = React.createClass({ 
+  
   getInitialState(){
   	return {
   		comments: [],
   		loading:true
   	}
   },
-  componentDidMount() {
-  	let self = this;
-  	if (this.props.params){
-	    this.getIssueComments(this.props.params.number,function(err,res){
-	    	let comments = [];
-	    	if (err){
-	    		console.log(err)
-	    	}
-	    	if (res){
-	    		console.log('comments',res)
-		    	res.forEach(function (comment) { 
-		    		console.log('comment',comment)
-			      comments.push(comment); 
-			      self.setState({comments:comments});
-		      })
-	    	}
-	    })
-  	} else {
-  		self.setState({comments:[]});
-  	}
-  },
-  componentWillReceiveProps(nextProps){
-  	console.log('next props for issue: ', nextProps)
-  },
 
+  componentDidMount() {
+	   let self = this;
+	   //make ajax request to get comments and update state
+	   if (this.props.params) {
+	     this.getIssueComments(this.props.params.number, function(err, res) {
+	       let comments = [];
+
+	       if (err) {
+	         console.err(err)
+	       }
+
+	       if (res) {
+	         res.forEach(function(comment) {
+		           comments.push(comment);
+		           self.setState({
+		             comments: comments
+		           });
+	         })
+	       }
+	     })
+
+	   } else {
+		     self.setState({
+		       	comments: []
+		     });
+	   }
+ },
+
+  //GET comments for specific issue
   getIssueComments(issueNumber,cb){
   	let req = new XMLHttpRequest();
-  	let url = 'https://api.github.com/repos/npm/npm/issues/' + issueNumber + '/comments'
+  	let url = 'https://api.github.com/repos/npm/npm/issues/' + issueNumber + '/comments';
   	req.onload = function () {
   	  if (req.status === 404) {
-  	    cb(new Error('not found'))
+  	    cb(new Error('not found'));
   	  } else {
-  	    cb(null, JSON.parse(req.response))
+  	    cb(null, JSON.parse(req.response));
   	  }
   	}
-  	req.open('GET', url)
-  	req.send()
+  	req.open('GET', url);
+  	req.send();
   },
   
+  //determine whether or not an issue is closed or open
   getIssueState(state){
   	if (state==='open'){
+
   		return <span style={styles.openIssue}> OPEN </span>
+
   	} else {
+
   		return <span style={styles.closedIssue}> CLOSED </span>
+
   	}
   },
 
@@ -62,17 +74,21 @@ let IssueView = React.createClass({
   	let issue;
   	//issue number retrieved based on url not on property passed in through Link!
   	if (this.props.params){
+
 	  	issue =  IssueStore.getIssue(this.props.params.number);		
   	}
   	if (!issue){
-  		console.log('here help')
+  		
   		return <div>This issue could not be found</div>;
   	}
   	
   	let issueLabels = issue && issue.labels  ? issue.labels.map(function(label){
+  		
   		let labelColor = '#'+label.color;
+
   		return <p style={{display:"inline",color:labelColor,fontSize:"12.5"}}> {label.name}</p>
-  	}): <p> </p>;
+
+  	}): <p>' '</p>;
   	
   	let comments = this.state.comments? this.state.comments.map(function(comment){
 
@@ -86,12 +102,13 @@ let IssueView = React.createClass({
 
   				</div>
   			);
+
   	}): <p> No comments </p>;
     return(
 
     	<div>
-    		{console.log('not here')}
-    		<div style={styles.header}> GithubIssueViewer.js <img src="../../assets/githubicon.png" width="25px" height="25px"> </img> </div>
+    		<div style={styles.header}> GithubIssueViewer.js <img src="../../assets/githubicon.png" width="25px" height="25px"> </img> 
+    		</div>
   			<div key={issue.number} style={styles.issue}> 
   				<p style={styles.issue_number}>#{issue.number || ''}</p>
   				<div style={styles.issue_icon_holder}>
@@ -113,13 +130,12 @@ let IssueView = React.createClass({
   				</div>
   				<Link to='/issues' style={styles.backbutton}> Back </Link>
   			</div>
-
-    		
     	</div>
     );
   }
 });
 
+//issue styles
 let styles = {
 	header: {
 	  backgroundColor:'white',
@@ -129,11 +145,13 @@ let styles = {
 	  height:'15%',
 	  paddingTop:'10',
 	  paddingBottom:'10',
+
 	  fontSize:24,
 	  fontFamily:'Tahoma', 
 	  textAlign:'center',
 	  color:'#f2b632',
 	  marginBottom:"25",
+	  marginRight:"10",
 	},
 	link: {
 		color:"#A9A9A9",
