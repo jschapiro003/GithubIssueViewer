@@ -11,9 +11,9 @@ let IssueView = React.createClass({
   	}
   },
   componentDidMount() {
-  	var self = this;
+  	let self = this;
     this.getIssueComments(this.props.params.number,function(err,res){
-    	
+    	let comments = [];
     	if (err){
     		console.log(err)
     	}
@@ -21,15 +21,19 @@ let IssueView = React.createClass({
     		console.log('comments',res)
 	    	res.forEach(function (comment) { 
 	    		console.log('comment',comment)
-		      self.state.comments.push(comment); 
+		      comments.push(comment); 
+		      self.setState({comments:comments});
 	      })
     	}
     })
   },
+  componentWillReceiveProps(nextProps){
+  	console.log('next props for issue: ', nextProps)
+  },
 
   getIssueComments(issueNumber,cb){
-  	var req = new XMLHttpRequest();
-  	var url = 'https://api.github.com/repos/npm/npm/issues/' + issueNumber + '/comments'
+  	let req = new XMLHttpRequest();
+  	let url = 'https://api.github.com/repos/npm/npm/issues/' + issueNumber + '/comments'
   	req.onload = function () {
   	  if (req.status === 404) {
   	    cb(new Error('not found'))
@@ -50,7 +54,7 @@ let IssueView = React.createClass({
   },
 
   render() {
-  	var self = this;
+  	let self = this;
   	//issue number retrieved based on url not on property passed in through Link!
   	let issue = IssueStore.getIssue(this.props.params.number);
   	let comments = this.state.comments.map(function(comment){
@@ -67,7 +71,10 @@ let IssueView = React.createClass({
   			);
   	});
     return(
+
     	<div>
+
+    		<div style={styles.header}> GithubIssueViewer.js <img src="../../assets/githubicon.png" width="25px" height="25px"> </img> </div>
   			<div key={issue.number} style={styles.issue}> 
   				<p style={styles.issue_number}>#{issue.number}</p>
   				<div style={styles.issue_icon_holder}>
@@ -86,17 +93,40 @@ let IssueView = React.createClass({
   					</div>
 
   				</div>
+  				<Link to='/issues' style={styles.backbutton}> Back </Link>
   			</div>
 
-    		<Link to='/issues'> Back </Link>
+    		
     	</div>
     );
   }
 });
 
 let styles = {
+	header: {
+	  backgroundColor:'white',
+	  opacity:".78",
+	  top:0,
+	  width:'100%',
+	  height:'15%',
+	  paddingTop:'10',
+	  paddingBottom:'10',
+	  fontSize:24,
+	  fontFamily:'Tahoma', 
+	  textAlign:'center',
+	  color:'#f2b632',
+	  marginBottom:"25",
+	},
+	link: {
+		color:"#A9A9A9",
+		textDecoration: "none"
+	},
+	backbutton:{
+		marginLeft:10,
+		color:"#A9A9A9",
+	},
 	issue: {
-		marginTop:20,
+		marginTop:60,
 		marginLeft:50,
 		marginRight:50,
 		marginBottom:10,
@@ -146,7 +176,9 @@ let styles = {
 	},
 	issue_summary: {
 		fontSize: 14,
-		color:'#A9A9A9'
+		color:'#A9A9A9',
+		marginLeft:"85",
+		marginRight:"85",
 
 	},
 	issue_labels: {
@@ -165,7 +197,7 @@ let styles = {
 		
     	backgroundColor:"white",
     	marginTop:10,
-    	marginLeft:"20%",
+    	marginLeft:"12%",
     	marginRight:"20%",
     	marginBottom:30,
     	paddingTop:20,
@@ -176,10 +208,12 @@ let styles = {
 	},
 	comment_user: {
 		fontSize:15,
+		marginLeft:'5%',
 	},
 	comment_summary: {
 		fontSize:12,
 		color:"#A9A9A9",
+		marginLeft:'5%',
 	},
 	comment_icon: {
 		width: 35,

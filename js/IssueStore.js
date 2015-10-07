@@ -31,6 +31,22 @@ let IssueStore = module.exports = {
     return array
   },
 
+  getIssuesRange: function(start,end){
+    console.log('getting more issues with range: ',start,end)
+    var array = []
+    var start = start;
+    var end = end;
+    for (var number in _issues)
+      if(start === end){
+        break;
+      } else {
+        start++;
+        array.push(_issues[number]) 
+      }
+
+    return array
+  },
+
   getIssue: function (number) {
     return _issues[number]
   },

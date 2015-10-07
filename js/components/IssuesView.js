@@ -3,12 +3,14 @@ import Router from 'react-router';
 import { DefaultRoute, Link, Route, RouteHandler } from 'react-router';
 import IssueStore from '../IssueStore.js';
 
+let apiStart = 0;
+let apiEnd = 25;
 
 let IssuesView = React.createClass({ 
   
   getInitialState(){
     return {
-      issues: IssueStore.getIssues(),
+      issues: IssueStore.getIssuesRange(apiStart,apiEnd),
       loading:true
     }
   },
@@ -18,7 +20,22 @@ let IssuesView = React.createClass({
   },
 
   componentDidMount() {
+  	let self = this;
     IssueStore.addChangeListener(this.updateIssues)
+    $(window).scroll(function() {
+    	let currentBottom = 0;
+       if($(window).scrollTop() + $(window).height() == $(document).height() && $(window).scrollTop()) {
+           if (IssueStore.getIssues().length > apiEnd){
+           		apiEnd = apiEnd + 25;
+           		self.updateIssues();
+           } 
+           
+       }
+    });
+  },
+
+  componentWillRecieveProps(nextProps){
+  	console.log('next props: ', nextProps)
   },
 
   componentWillUnmount() {
@@ -28,15 +45,15 @@ let IssuesView = React.createClass({
   updateIssues() {
     if (!this.isMounted())
       return
-
+  	console.log('close one')
     this.setState({
-      issues: IssueStore.getIssues(),
+      issues: IssueStore.getIssuesRange(apiStart,apiEnd),
       loading: false
     })
   },
 
   summaryBlurb: function(summary){
-  	var endpoint = 140;
+  	let endpoint = 140;
   	if (summary.length <= endpoint){
   		return summary;
   	}
@@ -51,9 +68,9 @@ let IssuesView = React.createClass({
   },
 
   render() {
-  	var self = this;
-  	var detailIssueURL = 'issues/';
-  	var issues = this.state.issues.map(function(issue){
+  	let self = this;
+  	let detailIssueURL = 'issues/';
+  	let issues = this.state.issues.map(function(issue){
   		return (
   			<div key={issue.number} style={styles.issue}> 
   				<p style={styles.issue_number}>#{issue.number}</p>
@@ -63,18 +80,21 @@ let IssuesView = React.createClass({
   				<div style={styles.issue_content}>
 	  				<p style={styles.issue_title}>{issue.title}</p>
 	  				<p style={styles.issue_username}>@{issue.user.login}</p>
-	  				<p style={styles.issue_summary}>{self.summaryBlurb(issue.body)}
-	  					<Link to={`issues/${issue.number}`} >...</Link>
-	  				</p>
+	  				<Link to={`issues/${issue.number}`} style={styles.link}>
+	  					<p style={styles.issue_summary}>{self.summaryBlurb(issue.body)}</p>
+	  				...</Link>
   				</div>
   			</div>
   		)
   	});
 
     return(
-    	<div style={styles.issues}>
-	    	<header style={styles.header}>Jonathan Schapiro Github Issue Viewer</header>
+    	<div>
+    	<div style={styles.header}> GithubIssueViewer.js <img src="../../assets/githubicon.png" width="25px" height="25px"> </img> </div>
+    	<div id="issuesContainer" style={styles.issues}>
+	       
 	    		{issues}
+    	</div>
     	</div>
     	);
 
@@ -84,20 +104,26 @@ let IssuesView = React.createClass({
 //issues styles
 let styles = {
 	header: {
-	  position:'fixed',
 	  backgroundColor:'white',
+	  opacity:".78",
 	  top:0,
 	  width:'100%',
-	  height:'8%',
+	  height:'15%',
 	  paddingTop:'10',
+	  paddingBottom:'10',
 	  fontSize:24,
 	  fontFamily:'Tahoma', 
 	  textAlign:'center',
-	  color:'#f2b632'
+	  color:'#f2b632',
+	  marginBottom:"25",
+	},
+	link: {
+		color:"#A9A9A9",
+		textDecoration: "none"
 	},
 
 	issue: {
-		marginTop:60,
+		marginTop:30,
 		marginLeft:50,
 		marginRight:50,
 		background:'white',
@@ -155,7 +181,7 @@ let styles = {
 	issue_labels: {
 		float:'right'
 	},
-	
+
 
 	
 }
