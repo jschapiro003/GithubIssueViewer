@@ -12,20 +12,24 @@ let IssueView = React.createClass({
   },
   componentDidMount() {
   	let self = this;
-    this.getIssueComments(this.props.params.number,function(err,res){
-    	let comments = [];
-    	if (err){
-    		console.log(err)
-    	}
-    	if (res){
-    		console.log('comments',res)
-	    	res.forEach(function (comment) { 
-	    		console.log('comment',comment)
-		      comments.push(comment); 
-		      self.setState({comments:comments});
-	      })
-    	}
-    })
+  	if (this.props.params){
+	    this.getIssueComments(this.props.params.number,function(err,res){
+	    	let comments = [];
+	    	if (err){
+	    		console.log(err)
+	    	}
+	    	if (res){
+	    		console.log('comments',res)
+		    	res.forEach(function (comment) { 
+		    		console.log('comment',comment)
+			      comments.push(comment); 
+			      self.setState({comments:comments});
+		      })
+	    	}
+	    })
+  	} else {
+  		self.setState({comments:[]});
+  	}
   },
   componentWillReceiveProps(nextProps){
   	console.log('next props for issue: ', nextProps)
@@ -55,14 +59,22 @@ let IssueView = React.createClass({
 
   render() {
   	let self = this;
+  	let issue;
   	//issue number retrieved based on url not on property passed in through Link!
-  	let issue = IssueStore.getIssue(this.props.params.number);
-  	let issueLabels = issue.labels.map(function(label){
-  		console.log('hi there')
+  	if (this.props.params){
+	  	issue =  IssueStore.getIssue(this.props.params.number);		
+  	}
+  	if (!issue){
+  		console.log('here help')
+  		return <div>This issue could not be found</div>;
+  	}
+  	
+  	let issueLabels = issue && issue.labels  ? issue.labels.map(function(label){
   		let labelColor = '#'+label.color;
   		return <p style={{display:"inline",color:labelColor,fontSize:"12.5"}}> {label.name}</p>
-  	});
-  	let comments = this.state.comments.map(function(comment){
+  	}): <p> </p>;
+  	
+  	let comments = this.state.comments? this.state.comments.map(function(comment){
 
   		return (
   				<div>
@@ -74,14 +86,14 @@ let IssueView = React.createClass({
 
   				</div>
   			);
-  	});
+  	}): <p> No comments </p>;
     return(
 
     	<div>
-
+    		{console.log('not here')}
     		<div style={styles.header}> GithubIssueViewer.js <img src="../../assets/githubicon.png" width="25px" height="25px"> </img> </div>
   			<div key={issue.number} style={styles.issue}> 
-  				<p style={styles.issue_number}>#{issue.number}</p>
+  				<p style={styles.issue_number}>#{issue.number || ''}</p>
   				<div style={styles.issue_icon_holder}>
   					<div style={styles.issue_icon.style(issue.user.avatar_url)}></div>
   				</div>

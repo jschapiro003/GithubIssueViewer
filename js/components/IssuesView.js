@@ -23,7 +23,7 @@ let IssuesView = React.createClass({
   componentDidMount() {
   	let self = this;
     IssueStore.addChangeListener(this.updateIssues)
-    if ($(window)){
+    if ($(window))	{
 	    $(window).scroll(function() {
 	    	let currentBottom = 0;
 	       if($(window).scrollTop() + $(window).height() == $(document).height() && $(window).scrollTop()) {
@@ -74,7 +74,9 @@ let IssuesView = React.createClass({
   	let self = this;
   	let detailIssueURL = 'issues/';
   	let issues = this.state.issues ? this.state.issues.map(function(issue){
+  		console.log('here',issue.labels.length)
   		let issueLabels = issue.labels.map(function(label){
+  			console.log('labels!!!!')
   			let labelColor = '#'+label.color;
   			return <p style={{display:"inline",color:labelColor,fontSize:"12.5"}}> {label.name}</p>
   		});
@@ -87,7 +89,7 @@ let IssuesView = React.createClass({
   				<div style={styles.issue_content}>
 	  				<p style={styles.issue_title}>{issue.title}</p>
 	  				<p style={styles.issue_username}>@{issue.user.login}</p>
-	  				{issueLabels}
+	  				{issueLabels || 'no label'}
 	  				<Link to={`issues/${issue.number}`} style={styles.link}>
 	  					<p style={styles.issue_summary}>{self.summaryBlurb(issue.body)}</p>
 	  				...</Link>

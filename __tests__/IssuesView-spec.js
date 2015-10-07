@@ -1,13 +1,13 @@
 jest.dontMock('../js/components/IssuesView.js');
 
+
 describe('IssuesView', function() {
   var React = require('react/addons');
   var TestUtils = React.addons.TestUtils;
   var $ = require('jquery');
   var IssuesView;
-  var Issues = [];
+ 
 
-  console.log('hi',IssuesView);
   beforeEach(function() {
     IssuesView = require('../js/components/IssuesView.js');
    
@@ -19,3 +19,4 @@ describe('IssuesView', function() {
     expect(TestUtils.isCompositeComponent(issuesView)).toBeTruthy();
   });
 });
+
