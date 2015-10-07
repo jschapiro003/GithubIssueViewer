@@ -1,5 +1,6 @@
 import React from 'react';
 import Router from 'react-router';  
+var $ = require('jquery');
 import { DefaultRoute, Link, Route, RouteHandler } from 'react-router';
 import IssueStore from '../IssueStore.js';
 
@@ -22,16 +23,18 @@ let IssuesView = React.createClass({
   componentDidMount() {
   	let self = this;
     IssueStore.addChangeListener(this.updateIssues)
-    $(window).scroll(function() {
-    	let currentBottom = 0;
-       if($(window).scrollTop() + $(window).height() == $(document).height() && $(window).scrollTop()) {
-           if (IssueStore.getIssues().length > apiEnd){
-           		apiEnd = apiEnd + 25;
-           		self.updateIssues();
-           } 
-           
-       }
-    });
+    if ($(window)){
+	    $(window).scroll(function() {
+	    	let currentBottom = 0;
+	       if($(window).scrollTop() + $(window).height() == $(document).height() && $(window).scrollTop()) {
+	           if (IssueStore.getIssues().length > apiEnd){
+	           		apiEnd = apiEnd + 25;
+	           		self.updateIssues();
+	           } 
+	           
+	       }
+	    });
+    }
   },
 
   componentWillRecieveProps(nextProps){
@@ -70,7 +73,7 @@ let IssuesView = React.createClass({
   render() {
   	let self = this;
   	let detailIssueURL = 'issues/';
-  	let issues = this.state.issues.map(function(issue){
+  	let issues = this.state.issues ? this.state.issues.map(function(issue){
   		let issueLabels = issue.labels.map(function(label){
   			let labelColor = '#'+label.color;
   			return <p style={{display:"inline",color:labelColor,fontSize:"12.5"}}> {label.name}</p>
@@ -91,7 +94,7 @@ let IssuesView = React.createClass({
   				</div>
   			</div>
   		)
-  	});
+  	}): <p> There are no issues to display </p> ;
 
     return(
     	<div>

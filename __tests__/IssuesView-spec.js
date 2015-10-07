@@ -3,7 +3,9 @@ jest.dontMock('../js/components/IssuesView.js');
 describe('IssuesView', function() {
   var React = require('react/addons');
   var TestUtils = React.addons.TestUtils;
-  var IssuesView = require('../js/components/IssuesView.js');
+  var $ = require('jquery');
+  var IssuesView;
+  var Issues = [];
 
   console.log('hi',IssuesView);
   beforeEach(function() {
