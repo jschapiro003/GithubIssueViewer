@@ -6,14 +6,23 @@ let Login = React.createClass({
 
   render() {
     return(
-    	<div style={styles.enter_container}>
-    		<Link to='/issues' style={styles.enter}> ENTER </Link>
+    	<div>
+	    	<div style={styles.enter_container}>
+	    		<Link to='/issues' style={styles.enter}>
+	    			Enter
+	    		</Link>
+	    	</div>
     	</div>
     	);
   }
 });
 
 let styles = {
+	headline: {
+		marginTop:"20%",
+		marginLeft: "auto",
+		marginRight: "auto",
+	},
 	enter_container: {
 		marginTop:"20%",
 		marginLeft: "auto",

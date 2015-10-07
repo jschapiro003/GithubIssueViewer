@@ -131,7 +131,7 @@ let styles = {
 	  textAlign:'center',
 	  color:'#f2b632',
 	  marginBottom:"25",
-	  marginRight:"10",
+	  marginRight:"20",
 	},
 	link: {
 		color:"#A9A9A9",
