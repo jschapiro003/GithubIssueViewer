@@ -71,6 +71,10 @@ let IssuesView = React.createClass({
   	let self = this;
   	let detailIssueURL = 'issues/';
   	let issues = this.state.issues.map(function(issue){
+  		let issueLabels = issue.labels.map(function(label){
+  			let labelColor = '#'+label.color;
+  			return <p style={{display:"inline",color:labelColor,fontSize:"12.5"}}> {label.name}</p>
+  		});
   		return (
   			<div key={issue.number} style={styles.issue}> 
   				<p style={styles.issue_number}>#{issue.number}</p>
@@ -80,6 +84,7 @@ let IssuesView = React.createClass({
   				<div style={styles.issue_content}>
 	  				<p style={styles.issue_title}>{issue.title}</p>
 	  				<p style={styles.issue_username}>@{issue.user.login}</p>
+	  				{issueLabels}
 	  				<Link to={`issues/${issue.number}`} style={styles.link}>
 	  					<p style={styles.issue_summary}>{self.summaryBlurb(issue.body)}</p>
 	  				...</Link>
@@ -178,12 +183,9 @@ let styles = {
 		color:'#A9A9A9'
 
 	},
-	issue_labels: {
-		float:'right'
-	},
 
 
-	
+
 }
 
 export default IssuesView;  

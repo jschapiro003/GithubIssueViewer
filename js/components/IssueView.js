@@ -57,8 +57,13 @@ let IssueView = React.createClass({
   	let self = this;
   	//issue number retrieved based on url not on property passed in through Link!
   	let issue = IssueStore.getIssue(this.props.params.number);
+  	let issueLabels = issue.labels.map(function(label){
+  		console.log('hi there')
+  		let labelColor = '#'+label.color;
+  		return <p style={{display:"inline",color:labelColor,fontSize:"12.5"}}> {label.name}</p>
+  	});
   	let comments = this.state.comments.map(function(comment){
-  		console.log('hi: ', comment.body)
+
   		return (
   				<div>
   					<div style={styles.comment_holder}>
@@ -84,6 +89,7 @@ let IssueView = React.createClass({
 	  				<p style={styles.issue_title}>{issue.title}</p>
 	  				<p style={styles.issue_username}>@{issue.user.login}</p>
 	  				<p style={styles.state}> {self.getIssueState(issue.state)} </p>
+	  				{issueLabels}
 	  				<p style={styles.issue_summary}>{issue.body}</p>
   				</div>
   				<div style={styles.comments_section}>
@@ -186,11 +192,15 @@ let styles = {
 	},
 	openIssue: {
 		backgroundColor:'green',
-		color:'white'
+		color:'white',
+		float:"left",
+		marginRight:"10",
 	},
 	closedIssue: {
 		backgroundColor:'red',
 		color:'white',
+		float:"left",
+		marginRight:"10",
 	},
 	comments_section: {
 		
