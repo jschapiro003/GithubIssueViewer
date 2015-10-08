@@ -9,11 +9,11 @@ let Login = React.createClass({
     return(
     	<div>
     	<DriveIn mute={false}
-    		  loop = {false}
+    		  
     	      show="../../assets/introMovie.mp4"
     	      poster="../../assets/githubicon.png"
-    	    />,
-    	    $mountNode
+    	      loop = {false}
+    	    />
 	    	<div style={styles.enter_container}>
 	    	 <Link to='/issues' style={styles.enter}>
 		    			Enter
@@ -46,9 +46,6 @@ let styles = {
 		fontWeight:"bold",
 		color:'#f2b632',
 		textDecoration: "none",
-		
-		   zIndex: "3", 
-
 
 	}, 
 	vid: {
