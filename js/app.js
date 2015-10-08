@@ -10,17 +10,22 @@ import IssueStore from './IssueStore.js';
 
 let App = React.createClass({  
   
+  playVideo: {
+
+  },
+
   render() {
 
     return (
-      <div class='pageContainer'>
-        
+      <div>
           <Login/>
-        
       </div>
 
     );
   }
+
+ 
+
 });
 
 React.render((
@@ -30,6 +35,7 @@ React.render((
     <Route path="issues/:number" component={IssueView}/>
   </Router>
 ), document.body)
+
 
 
 
